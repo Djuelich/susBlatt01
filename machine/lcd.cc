@@ -10,6 +10,7 @@
 #include <msp430.h>
 #include "machine/lcd.h"
 
+//0bDCBA*EGF
 unsigned char digitArr[] = {
   0b11110101,
   0b01100000,
@@ -21,6 +22,9 @@ unsigned char digitArr[] = {
   0b01110000,
   0b11110111,
   0b11110011
+};
+
+unsigned char charArr[] = {
 };
 
 LCD LCD::lcd; // Singleton Instanz
@@ -91,9 +95,39 @@ if (x > 11){
   addr = LCD_BASE + offset + x ;
   *addr = lcd_digit;
 
- }
+}
 
 void LCD::show_char(const char letter, unsigned int pos, bool upper_line){
+  char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
+  char*addr ;
+  int  offset =0x20;
+  unsigned int  x=pos;
+  unsigned char lcd_char = charArr[letter];
+
+
+  if(!upper_line){
+    x=12-x;
+
+    //Hier wird lower -> upper geshiftet
+    unsigned char temp1 = lcd_char & 0b11110000;
+    unsigned char temp2 = lcd_char & 0b00001111;
+    temp1 = temp1 >> 4;
+    temp2 = temp2 << 4;
+    lcd_char = temp1 | temp2;
+
+  } else {
+    if(x==4){
+      x++;
+    }
+  }
+
+  //Fehlerüberprüfung (Mit momentan ḱlarer Fehlermeldung)
+if (x > 11){
+  x = 4;
+}
+
+  addr = LCD_BASE + offset + x ;
+  *addr = lcd_char;
 
 }
 
