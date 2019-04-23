@@ -41,16 +41,16 @@ public:
    * Die untere Zeile hat 5 Positionen:  12345
    *
    */
-
+  
   // Zeigt eine einzelne Ziffer "digit" an
   void show_digit(unsigned int digit, unsigned int pos, bool upper_line=false);
-
+  
   // Zeigt ein einzelnes Zeichen "letter" an
   void show_char(const char letter, unsigned int pos, bool upper_line=true);
-
+  
   // Zeigt eine ganze Zahl "number" an
   void show_number(long int number, bool upper_line=false);
-
+  
   // Zeigt den String "text" an
   void show_string(const char *text, bool upper_line=true);
 };

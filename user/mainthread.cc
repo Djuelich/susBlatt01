@@ -10,34 +10,33 @@ void MainThread::action() {
 
     /* Watchdog anstossen */
     watchdog_reset();
+
     // Hier muesst ihr selbst Code ergaenzen
-    
-    //show_number testsection
-    //LCD::instance().show_number(number,true/false);
-
-    //show_digit testsection
-    //TODO Fehlerbehandlung für mehrere pos = n
-    
-    /*LCD::instance().show_digit(0, 1, true); // Beispielsweiser LCD-Zugriff
-    LCD::instance().show_digit(1, 2, true);
-    LCD::instance().show_digit(2, 3, true);
-    LCD::instance().show_digit(3, 4, true);
-
-    LCD::instance().show_digit(4, 1, false);
-    LCD::instance().show_digit(5, 2, false);
-    LCD::instance().show_digit(6, 3, false);
-    LCD::instance().show_digit(7, 4, false);
-    LCD::instance().show_digit(8, 5, false);
-  }
-  */
-    //show_char testsection
-    LCD::instance().show_char(1,1, false);
-
-    //show_string testsection
     /*
-    LCD::instance().show_string(text, true/false)
-    */
+    LCD::instance().show_digit(1, 1, true); // Beispielsweiser LCD-Zugriff
+    LCD::instance().show_digit(2, 2, true);
+    LCD::instance().show_digit(3, 3, true);
+    LCD::instance().show_digit(4, 4, true);
 
+    LCD::instance().show_digit(5, 1, false);
+    LCD::instance().show_digit(6, 2, false);
+    LCD::instance().show_digit(7, 3, false);
+    LCD::instance().show_digit(8, 4, false);
+    LCD::instance().show_digit(9, 5, false);
+  */
+    //LCD::instance().show_number(333, true);
+
+    LCD::instance().show_char('s', 1, true);
+    LCD::instance().show_char('t', 2, true);
+    LCD::instance().show_char('u', 3, true);
+    LCD::instance().show_char('v', 4, true);
+
+    LCD::instance().show_char('w', 1, false);
+    LCD::instance().show_char('x', 2, false);
+    LCD::instance().show_char('y', 3, false);
+    LCD::instance().show_char('z', 4, false);
+    LCD::instance().show_char('r', 5, false);
+  }
   // Achtung: Die action()-Methode darf nicht zurueckkehren,
   //          daher die Endlosschleife!
 }
