@@ -82,8 +82,17 @@ void LCD::clear() { LCDBMEMCTL |= LCDCLRBM | LCDCLRM; }
 
 // Hier muesst ihr selbst Code ergaenzen, beispielsweise:
 void LCD::show_number(long int number, bool upper_line) {
-  
- }
+/*   char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
+  char*addr ;
+  int  offset =0x20;
+  unsigned int  x=pos;
+  unsigned char lcd_digit = digitArr[digit];
+
+  addr = LCD_BASE + offset + x ;
+  *addr = lcd_char;
+*/
+}
+
 
 
 void LCD::show_digit(unsigned int digit, unsigned int pos, bool upper_line){
@@ -125,7 +134,14 @@ void LCD::show_char(const char letter, unsigned int pos, bool upper_line){
   char*addr ;
   int  offset =0x20;
   unsigned int  x=pos;
-  unsigned int ascii_int = (int)letter - 97;
+  unsigned int ascii_int = (int)letter;
+if(ascii_int > 90){
+  ascii_int = (int)letter - 97;
+}
+else{
+  ascii_int = (int)letter - 65;
+}
+
   unsigned char lcd_char = charArr[ascii_int];
 
 if(!upper_line){
