@@ -17,6 +17,9 @@ private:
   LCD(const LCD &copy); // Verhindere Kopieren
   LCD();
 
+  static unsigned char switch_nibbles(unsigned char input);
+  static void output (unsigned char input, unsigned int pos, bool upper_line);
+
   // Hinweis: Speicherbereich des LCD-Controllers (Kap. 23 des slau259)
   enum { LCD_MEMORY_START = 0x0a00 + 0x20, /* LCDM1  */
          LCD_MEMORY_END   = 0x0a00 + 0x2d  /* LCDM14 */ };

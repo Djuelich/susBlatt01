@@ -10,6 +10,14 @@
 #include <msp430.h>
 #include "machine/lcd.h"
 
+//Sonderzeichen Array zurzeit nur Minus und Leerzeichen
+unsigned char symbolArr[] = {
+  //Leerzeichen als Unterstrich dargestellt
+  0b10000000,
+  //Minus Zeichen
+  0b00000010
+};
+
 //0-1 Array für Segmentbelegung
 unsigned char digitArr[] = {
   0b11110101,
@@ -79,99 +87,143 @@ LCD::LCD() {
 
 void LCD::clear() { LCDBMEMCTL |= LCDCLRBM | LCDCLRM; }
 
+unsigned char LCD::switch_nibbles(unsigned char input){
+  unsigned char temp1 = input & 0b11110000;
+  unsigned char temp2 = input & 0b00001111;
+  temp1 = temp1 >> 4;
+  temp2 = temp2 << 4;
+  return temp1 | temp2;
+}
+
+//Nimmt Bytemaske für 7-Segment Anzeige entgegen und mapped es auf die jeweilige Position
+void LCD::output (unsigned char input, unsigned int pos, bool upper_line){
+  char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
+  int offset = 0x20;
+  unsigned char symbol = input;
+
+  unsigned int  x = pos;
+
+  if (!upper_line) {
+    x = 12 - x;
+
+    //Hier wird lower -> upper geshiftet
+    symbol = switch_nibbles(symbol);
+
+  } else {
+    if (x == 4) {
+      x++;
+    }
+  }
+
+  //Fehlerüberprüfung (Mit momentan ḱlarer Fehlermeldung)
+  if (x > 11) {
+    x = 4;
+  }
+
+  char*addr = LCD_BASE + offset + x;
+  *addr = symbol;  
+}
+
+
+
 
 // Hier muesst ihr selbst Code ergaenzen, beispielsweise:
 void LCD::show_number(long int number, bool upper_line) {
-  /*   char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
-    char*addr ;
-    int  offset =0x20;
-    unsigned int  x=pos;
-    unsigned char lcd_digit = digitArr[digit];
+  //Eingabenprüfung: 
+  if(upper_line){
+    if(number < -999 || number > 9999){
+      for (int i = 1; i < 5; i++){
+        output(symbolArr[1], i, upper_line);
+      }
+      return;
+    }
+  } else {
+    if(number < -9999 || number > 99999){
+      for (int i = 1; i < 6; i++){
+        output(symbolArr[1], i, upper_line);
+      }
+      return;
+    }
+  }
 
-    addr = LCD_BASE + offset + x ;
-    *addr = lcd_char;
-  */
+  long int temp = number;
+  //Maximale Länge des Arrays festlegen
+  int max_digits = upper_line ? 4 : 5;
+  unsigned int digits[max_digits];
+  
+  //Vorzeichen abfragen
+  bool negative = false;
+  if(number < 0){
+    negative = true;
+    temp *= -1;
+  }
+
+  
+  //Zahl in einzelne Stellen aufteilen
+  int stop = 0;
+  for (int i = max_digits -1; i >= 0; i--){
+    digits[i] = temp%10;
+    temp /= 10;
+
+    //Führende Nullen entfernen und Anfang der Zahl merken
+    if(temp == 0){
+      stop = i;
+      break;
+    }
+  }
+
+  for (int i = max_digits -1; i >= stop; i--){
+    show_digit(digits[i], i+1, upper_line);
+  }
+
+  if(negative){
+    output(symbolArr[1], stop, upper_line);  
+  }
+
 }
 
 
 
 void LCD::show_digit(unsigned int digit, unsigned int pos, bool upper_line) {
-  char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
-  char*addr ;
-  int  offset = 0x20;
-  unsigned int  x = pos;
-  unsigned char lcd_digit = digitArr[digit];
-
-
-  if (!upper_line) {
-    x = 12 - x;
-
-    //Hier wird lower -> upper geshiftet
-    unsigned char temp1 = lcd_digit & 0b11110000;
-    unsigned char temp2 = lcd_digit & 0b00001111;
-    temp1 = temp1 >> 4;
-    temp2 = temp2 << 4;
-    lcd_digit = temp1 | temp2;
-
-  } else {
-    if (x == 4) {
-      x++;
-    }
+  //Eingabenprüfung
+  if(digit > 9){
+    output(symbolArr[1], pos, upper_line);
+    return;
   }
 
-//Fehlerüberprüfung (Mit momentan ḱlarer Fehlermeldung)
-  if (x > 11) {
-    x = 4;
-  }
-
-  addr = LCD_BASE + offset + x ;
-  *addr = lcd_digit;
-
+  //Ausgabe auf LCD
+  output(digitArr[digit], pos, upper_line);
 }
 
 //Funktion zur Buchstabenanzeige
 void LCD::show_char(const char letter, unsigned int pos, bool upper_line) {
-  char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
-  char*addr ;
-  int  offset = 0x20;
-  unsigned int  x = pos;
   unsigned int ascii_int = (int)letter;
   //Behandlung von Groß- und Kleinbuchstaben (untersch. Ascii-Wert)
   if (ascii_int > 90) {
-    ascii_int = (int)letter - 97;
+    ascii_int -= 97;
   }
   else {
-    ascii_int = (int)letter - 65;
+    ascii_int -= 65;
   }
+
   unsigned char lcd_char = charArr[ascii_int];
 
-  if (!upper_line) {
-    x = 12 - x;
-
-    //Hier wird lower -> upper geshiftet
-    unsigned char temp1 = lcd_char & 0b11110000;
-    unsigned char temp2 = lcd_char & 0b00001111;
-    temp1 = temp1 >> 4;
-    temp2 = temp2 << 4;
-    lcd_char = temp1 | temp2;
-
-  } else {
-    if (x == 4) {
-      x++;
-    }
-  }
-
-//Fehlerüberprüfung (Mit momentan ḱlarer Fehlermeldung)
-  if (x > 11) {
-    x = 4;
-  }
-
-  addr = LCD_BASE + offset + x ;
-  *addr = lcd_char;
-
+  //Ausgabe auf LCD
+  output(lcd_char, pos, upper_line);
 }
 
 void LCD::show_string(const char *text, bool upper_line) {
+  int max_chars = upper_line ? 4 : 5;
+
+  //Ausgebe des Strings so weit es geht. Rest wird abgeschnitten
+  for (int i = 0; i < max_chars && text[i] != 0; i++){
+    //Leerzeichenbehandlung
+    if (text[i] == 32){
+      output(symbolArr[0], i+1, upper_line);
+    } else {
+      show_char(text[i], i+1, upper_line);  
+    }
+    
+  }
 
 }
-
