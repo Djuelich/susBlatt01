@@ -26,32 +26,32 @@ unsigned char digitArr[] = {
 
 //Alphabet A-Z Segmentbelegung
 unsigned char charArr[] = {
-    0b01110111,
-    0b11000111,
-    0b10010101,
-    0b11100110,
-    0b10010111,
-    0b00010111,
-    0b11010101,
-    0b01000111,
-    0b00000101,
-    0b11100100,
-    0b01010111,
-    0b10000101,
-    0b01010110,
-    0b01000110,
-    0b11000110,
-    0b00110111,
-    0b10110011,
-    0b00000110,
-    0b11010011,
-    0b10000111,
-    0b11100101,
-    0b11000100,
-    0b10100011,
-    0b01100111,
-    0b11100011,
-    0b10110100,
+  0b01110111,
+  0b11000111,
+  0b10010101,
+  0b11100110,
+  0b10010111,
+  0b00010111,
+  0b11010101,
+  0b01000111,
+  0b00000101,
+  0b11100100,
+  0b01010111,
+  0b10000101,
+  0b01010110,
+  0b01000110,
+  0b11000110,
+  0b00110111,
+  0b10110011,
+  0b00000110,
+  0b11010011,
+  0b10000111,
+  0b11100101,
+  0b11000100,
+  0b10100011,
+  0b01100111,
+  0b11100011,
+  0b10110100,
 };
 
 LCD LCD::lcd; // Singleton Instanz
@@ -82,29 +82,29 @@ void LCD::clear() { LCDBMEMCTL |= LCDCLRBM | LCDCLRM; }
 
 // Hier muesst ihr selbst Code ergaenzen, beispielsweise:
 void LCD::show_number(long int number, bool upper_line) {
-/*   char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
-  char*addr ;
-  int  offset =0x20;
-  unsigned int  x=pos;
-  unsigned char lcd_digit = digitArr[digit];
+  /*   char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
+    char*addr ;
+    int  offset =0x20;
+    unsigned int  x=pos;
+    unsigned char lcd_digit = digitArr[digit];
 
-  addr = LCD_BASE + offset + x ;
-  *addr = lcd_char;
-*/
+    addr = LCD_BASE + offset + x ;
+    *addr = lcd_char;
+  */
 }
 
 
 
-void LCD::show_digit(unsigned int digit, unsigned int pos, bool upper_line){
+void LCD::show_digit(unsigned int digit, unsigned int pos, bool upper_line) {
   char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
   char*addr ;
-  int  offset =0x20;
-  unsigned int  x=pos;
+  int  offset = 0x20;
+  unsigned int  x = pos;
   unsigned char lcd_digit = digitArr[digit];
 
 
-  if(!upper_line){
-    x=12-x;
+  if (!upper_line) {
+    x = 12 - x;
 
     //Hier wird lower -> upper geshiftet
     unsigned char temp1 = lcd_digit & 0b11110000;
@@ -114,38 +114,39 @@ void LCD::show_digit(unsigned int digit, unsigned int pos, bool upper_line){
     lcd_digit = temp1 | temp2;
 
   } else {
-    if(x==4){
+    if (x == 4) {
       x++;
     }
   }
 
-  //Fehlerüberprüfung (Mit momentan ḱlarer Fehlermeldung)
-if (x > 11){
-  x = 4;
-}
+//Fehlerüberprüfung (Mit momentan ḱlarer Fehlermeldung)
+  if (x > 11) {
+    x = 4;
+  }
 
   addr = LCD_BASE + offset + x ;
   *addr = lcd_digit;
 
- }
+}
 
-void LCD::show_char(const char letter, unsigned int pos, bool upper_line){
+//Funktion zur Buchstabenanzeige
+void LCD::show_char(const char letter, unsigned int pos, bool upper_line) {
   char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
   char*addr ;
-  int  offset =0x20;
-  unsigned int  x=pos;
+  int  offset = 0x20;
+  unsigned int  x = pos;
   unsigned int ascii_int = (int)letter;
-if(ascii_int > 90){
-  ascii_int = (int)letter - 97;
-}
-else{
-  ascii_int = (int)letter - 65;
-}
-
+  //Behandlung von Groß- und Kleinbuchstaben (untersch. Ascii-Wert)
+  if (ascii_int > 90) {
+    ascii_int = (int)letter - 97;
+  }
+  else {
+    ascii_int = (int)letter - 65;
+  }
   unsigned char lcd_char = charArr[ascii_int];
 
-if(!upper_line){
-    x=12-x;
+  if (!upper_line) {
+    x = 12 - x;
 
     //Hier wird lower -> upper geshiftet
     unsigned char temp1 = lcd_char & 0b11110000;
@@ -155,22 +156,22 @@ if(!upper_line){
     lcd_char = temp1 | temp2;
 
   } else {
-    if(x==4){
+    if (x == 4) {
       x++;
     }
   }
 
-  //Fehlerüberprüfung (Mit momentan ḱlarer Fehlermeldung)
-if (x > 11){
-  x = 4;
-}
+//Fehlerüberprüfung (Mit momentan ḱlarer Fehlermeldung)
+  if (x > 11) {
+    x = 4;
+  }
 
   addr = LCD_BASE + offset + x ;
   *addr = lcd_char;
 
 }
 
-void LCD::show_string(const char *text, bool upper_line){
+void LCD::show_string(const char *text, bool upper_line) {
 
 }
 

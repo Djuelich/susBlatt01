@@ -11,7 +11,6 @@ void MainThread::action() {
     /* Watchdog anstossen */
     watchdog_reset();
 
-    // Hier muesst ihr selbst Code ergaenzen
     /*
     LCD::instance().show_digit(1, 1, true); // Beispielsweiser LCD-Zugriff
     LCD::instance().show_digit(2, 2, true);
@@ -35,7 +34,10 @@ void MainThread::action() {
     LCD::instance().show_char('c', 2, false);
     LCD::instance().show_char('D', 3, false);
     LCD::instance().show_char('d', 4, false);
-    LCD::instance().show_char('r', 5, false);
+    LCD::instance().show_char('E', 5, false);
+
+    //LCD::instance()show_string(text, true/false);
+
   }
   // Achtung: Die action()-Methode darf nicht zurueckkehren,
   //          daher die Endlosschleife!
