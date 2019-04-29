@@ -1,10 +1,11 @@
 /*
  * lcd.cc
  *
+ *Autoren: Dominik Jülich, Eduard Rempel, Frederik Schierbaum
+ *
  * Objekt zur grundlegenden Ansteuerung des LCDs der Chronos-Uhr
  *
- * Kann im Augenblick nur initialisieren (im Konstruktor) und
- * alle Segmente ausschalten.
+ * Aufgaben sind funktionabel.
  */
 
 #include <msp430.h>
@@ -87,7 +88,7 @@ LCD::LCD() {
 
 void LCD::clear() { LCDBMEMCTL |= LCDCLRBM | LCDCLRM; }
 
-unsigned char LCD::switch_nibbles(unsigned char input){
+unsigned char LCD::switch_nibbles(unsigned char input) {
   unsigned char temp1 = input & 0b11110000;
   unsigned char temp2 = input & 0b00001111;
   temp1 = temp1 >> 4;
@@ -96,7 +97,7 @@ unsigned char LCD::switch_nibbles(unsigned char input){
 }
 
 //Nimmt Bytemaske für 7-Segment Anzeige entgegen und mapped es auf die jeweilige Position
-void LCD::output (unsigned char input, unsigned int pos, bool upper_line){
+void LCD::output (unsigned char input, unsigned int pos, bool upper_line) {
   char*LCD_BASE = reinterpret_cast <char*>(0x0a00) ;
   int offset = 0x20;
   unsigned char symbol = input;
@@ -121,7 +122,7 @@ void LCD::output (unsigned char input, unsigned int pos, bool upper_line){
   }
 
   char*addr = LCD_BASE + offset + x;
-  *addr = symbol;  
+  *addr = symbol;
 }
 
 
@@ -129,17 +130,17 @@ void LCD::output (unsigned char input, unsigned int pos, bool upper_line){
 
 // Hier muesst ihr selbst Code ergaenzen, beispielsweise:
 void LCD::show_number(long int number, bool upper_line) {
-  //Eingabenprüfung: 
-  if(upper_line){
-    if(number < -999 || number > 9999){
-      for (int i = 1; i < 5; i++){
+  //Eingabenprüfung:
+  if (upper_line) {
+    if (number < -999 || number > 9999) {
+      for (int i = 1; i < 5; i++) {
         output(symbolArr[1], i, upper_line);
       }
       return;
     }
   } else {
-    if(number < -9999 || number > 99999){
-      for (int i = 1; i < 6; i++){
+    if (number < -9999 || number > 99999) {
+      for (int i = 1; i < 6; i++) {
         output(symbolArr[1], i, upper_line);
       }
       return;
@@ -150,34 +151,34 @@ void LCD::show_number(long int number, bool upper_line) {
   //Maximale Länge des Arrays festlegen
   int max_digits = upper_line ? 4 : 5;
   unsigned int digits[max_digits];
-  
+
   //Vorzeichen abfragen
   bool negative = false;
-  if(number < 0){
+  if (number < 0) {
     negative = true;
     temp *= -1;
   }
 
-  
+
   //Zahl in einzelne Stellen aufteilen
   int stop = 0;
-  for (int i = max_digits -1; i >= 0; i--){
-    digits[i] = temp%10;
+  for (int i = max_digits - 1; i >= 0; i--) {
+    digits[i] = temp % 10;
     temp /= 10;
 
     //Führende Nullen entfernen und Anfang der Zahl merken
-    if(temp == 0){
+    if (temp == 0) {
       stop = i;
       break;
     }
   }
 
-  for (int i = max_digits -1; i >= stop; i--){
-    show_digit(digits[i], i+1, upper_line);
+  for (int i = max_digits - 1; i >= stop; i--) {
+    show_digit(digits[i], i + 1, upper_line);
   }
 
-  if(negative){
-    output(symbolArr[1], stop, upper_line);  
+  if (negative) {
+    output(symbolArr[1], stop, upper_line);
   }
 
 }
@@ -186,7 +187,7 @@ void LCD::show_number(long int number, bool upper_line) {
 
 void LCD::show_digit(unsigned int digit, unsigned int pos, bool upper_line) {
   //Eingabenprüfung
-  if(digit > 9){
+  if (digit > 9) {
     output(symbolArr[1], pos, upper_line);
     return;
   }
@@ -216,14 +217,14 @@ void LCD::show_string(const char *text, bool upper_line) {
   int max_chars = upper_line ? 4 : 5;
 
   //Ausgebe des Strings so weit es geht. Rest wird abgeschnitten
-  for (int i = 0; i < max_chars && text[i] != 0; i++){
+  for (int i = 0; i < max_chars && text[i] != 0; i++) {
     //Leerzeichenbehandlung
-    if (text[i] == 32){
-      output(symbolArr[0], i+1, upper_line);
+    if (text[i] == 32) {
+      output(symbolArr[0], i + 1, upper_line);
     } else {
-      show_char(text[i], i+1, upper_line);  
+      show_char(text[i], i + 1, upper_line);
     }
-    
+
   }
 
 }

@@ -22,10 +22,11 @@ private:
 
   // Hinweis: Speicherbereich des LCD-Controllers (Kap. 23 des slau259)
   enum { LCD_MEMORY_START = 0x0a00 + 0x20, /* LCDM1  */
-         LCD_MEMORY_END   = 0x0a00 + 0x2d  /* LCDM14 */ };
+         LCD_MEMORY_END   = 0x0a00 + 0x2d  /* LCDM14 */
+       };
 
 public:
-   /* Methode zum Zugriff auf die Singleton Instanz */
+  /* Methode zum Zugriff auf die Singleton Instanz */
   static LCD& instance() {
     return lcd;
   }
@@ -44,18 +45,18 @@ public:
    * Die untere Zeile hat 5 Positionen:  12345
    *
    */
-  
+
   // Zeigt eine einzelne Ziffer "digit" an
-  void show_digit(unsigned int digit, unsigned int pos, bool upper_line=false);
-  
+  void show_digit(unsigned int digit, unsigned int pos, bool upper_line = false);
+
   // Zeigt ein einzelnes Zeichen "letter" an
-  void show_char(const char letter, unsigned int pos, bool upper_line=true);
-  
+  void show_char(const char letter, unsigned int pos, bool upper_line = true);
+
   // Zeigt eine ganze Zahl "number" an
-  void show_number(long int number, bool upper_line=false);
-  
+  void show_number(long int number, bool upper_line = false);
+
   // Zeigt den String "text" an
-  void show_string(const char *text, bool upper_line=true);
+  void show_string(const char *text, bool upper_line = true);
 };
 
 #endif
