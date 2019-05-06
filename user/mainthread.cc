@@ -2,6 +2,7 @@
 #include <msp430.h>
 #include "machine/system.h"
 #include "machine/lcd.h"
+#include "machine/buttons.h"
 
 void MainThread::action() {
   while (1) {
@@ -12,6 +13,8 @@ void MainThread::action() {
     watchdog_reset();
 
     //Testsektion. Auskommentieren zum testen.
+    Buttons::instance().enable(Buttons::UP | Buttons::DOWN | Buttons::HASH | Buttons::STAR);
+
 
     /*
     LCD::instance().show_digit(1, 1, true); // Beispielsweiser LCD-Zugriff
@@ -26,7 +29,34 @@ void MainThread::action() {
     LCD::instance().show_digit(9, 5, false);
     */
 
-    //LCD::instance().show_number(333, true);
+    if (Buttons::instance().pressed(Buttons::UP))
+    {
+      LCD::instance().show_digit(1, 1, true);
+    }else{
+      LCD::instance().show_digit(0, 1, true);
+    }
+    
+    if (Buttons::instance().pressed(Buttons::DOWN))
+    {
+      LCD::instance().show_digit(1, 2, true);
+    }else{
+      LCD::instance().show_digit(0, 2, true);
+    }
+
+    if (Buttons::instance().pressed(Buttons::STAR))
+    {
+      LCD::instance().show_digit(1, 3, true);
+    }else{
+      LCD::instance().show_digit(0, 3, true);
+    }
+
+    if (Buttons::instance().pressed(Buttons::HASH))
+    {
+      LCD::instance().show_digit(1, 4, true);
+    }else{
+      LCD::instance().show_digit(0, 4, true);
+    }
+    //LCD::instance().show_number(Buttons::instance().read(), true);
 
     /*
       LCD::instance().show_char('A', 1, true);
