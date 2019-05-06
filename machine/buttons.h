@@ -25,10 +25,10 @@ public:
    * Welche das genau sind, muesst ihr anhand des Daten-
    * blatts "eZ430-Chronos User's Guide (slau292)" herausfinden.
    */
-  static const uint8_t UP   /* = ... */ ; // Hier muesst ihr selbst Code ergaenzen
-  static const uint8_t DOWN /* = ... */ ; // Hier muesst ihr selbst Code ergaenzen
-  static const uint8_t HASH /* = ... */ ; // Hier muesst ihr selbst Code ergaenzen
-  static const uint8_t STAR /* = ... */ ; // Hier muesst ihr selbst Code ergaenzen
+  static const uint8_t UP    = 0b00010000  ; // Hier muesst ihr selbst Code ergaenzen
+  static const uint8_t DOWN  = 0b00000001  ; // Hier muesst ihr selbst Code ergaenzen
+  static const uint8_t HASH  = 0b00000010  ; // Hier muesst ihr selbst Code ergaenzen
+  static const uint8_t STAR  = 0b00000100  ; // Hier muesst ihr selbst Code ergaenzen
 
   /*
    * enable(btn): aktiviert den(die) gewuenschten Button(s)
