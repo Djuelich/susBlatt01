@@ -13,7 +13,7 @@ void MainThread::action() {
     watchdog_reset();
 
     //Testsektion. Auskommentieren zum testen.
-    Buttons::instance().enable(Buttons::UP | Buttons::DOWN | Buttons::HASH | Buttons::STAR);
+    Buttons::instance().enable(Buttons::UP | Buttons::DOWN | Buttons::STAR);
 
 
     /*
@@ -29,6 +29,7 @@ void MainThread::action() {
     LCD::instance().show_digit(9, 5, false);
     */
 
+    /*
     if (Buttons::instance().pressed(Buttons::UP))
     {
       LCD::instance().show_digit(1, 1, true);
@@ -56,6 +57,8 @@ void MainThread::action() {
     }else{
       LCD::instance().show_digit(0, 4, true);
     }
+    */
+    
     //LCD::instance().show_number(Buttons::instance().read(), true);
 
     /*
