@@ -1,0 +1,44 @@
+#ifndef IDLETIMER_AH
+#define IDLETIMER_AH
+
+#include "machine/lcd.h"
+#include "machine/timer.h"
+
+aspect IdleTimer {
+
+    int idleTime;
+    int totalTime;
+    bool idle;
+    IdleTimer(){
+        //Timer starten
+        Timer::start();
+        idleTime = 0;
+        totalTime = 0;
+        idle = false;
+    }
+
+    advice execution("% CPU::idle(...)") : before(){
+        idle = true;
+        Timer::stop();
+        totalTime += Timer::getcycles();
+        Timer::start();
+    }
+
+    advice execution("% %::prologue(...)") : before(){
+        Timer::stop();
+        if(idle){
+            idleTime += Timer::getcycles();
+        }
+        idle = false;
+        totalTime += Timer::getcycles();
+        Timer::start();
+    }
+
+    advice execution("% CPUWatch::dummy(...)") : after(){
+        int temp = (int)(((float)idleTime)/((float)totalTime) *100)
+        LCD::instance().show_number(temp, false);
+    }
+
+};
+
+#endif

@@ -40,13 +40,6 @@ void Timer::plugin() {
 
   /* Timer-Interrupts zulassen */
   TA0CTL |= TAIE;
-
-
-  /** Timer 1: Mikrosekunden-Zaehler **/
-  /* Zusaetzlicher Divisor 3 -> SMCLK/12 */
-  TA1EX0 = 2;
-  /* SMCLK/4 aufwaerts zaehlen */
-  TA1CTL = TASSEL__SMCLK | ID_2 | MC__STOP; // erstmal gestoppt lassen
 }
 
 bool Timer::prologue() {
@@ -64,15 +57,23 @@ void Timer::delay_us(unsigned int us) {
     asm volatile ("nop");
 }
 
-/** Timer 1: Mikrosekunden-Zaehler **/
+
+/** Mikrosekunden-Zaehler **/
+static unsigned int counter;
+
 void Timer::start() {
-  TA1CTL = TACLR | TASSEL__SMCLK | ID_2 | MC__CONTINOUS;
+  counter = TA0R;
 }
 
-void Timer::stop() { 
-  TA1CTL = MC__STOP; // oder: &=~ MC__STOP; ?
+void Timer::stop() {
+  unsigned int now = TA0R;
+  if(now >= counter) {
+    counter = now - counter; // einfache Differenz
+  }
+  else {
+    counter = (TA0CCR0 - counter) + now; // Ueberlaufbehandlung
+  }
 }
 
-unsigned int Timer::getcycles() {
-  return TA1R;
-}
+unsigned int Timer::getcycles() { return counter; }
+

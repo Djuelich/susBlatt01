@@ -164,21 +164,26 @@ void LCD::show_number(long int number, bool upper_line) {
   int stop = 0;
   for (int i = max_digits - 1; i >= 0; i--) {
     digits[i] = temp % 10;
-    temp /= 10;
+
 
     //Führende Nullen entfernen und Anfang der Zahl merken
     if (temp == 0) {
-      stop = i;
-      break;
+      if(stop==0){
+        stop = i;
+      }
+
+      output(0b00000000, i+1, upper_line);
+    }else {
+        show_digit(digits[i], i + 1, upper_line);
     }
+
+     temp /= 10;
   }
 
-  for (int i = max_digits - 1; i >= stop; i--) {
-    show_digit(digits[i], i + 1, upper_line);
-  }
+
 
   if (negative) {
-    output(symbolArr[1], stop, upper_line);
+    output(symbolArr[1], stop+1, upper_line);
   }
 
 }
@@ -215,13 +220,18 @@ void LCD::show_char(const char letter, unsigned int pos, bool upper_line) {
 
 void LCD::show_string(const char *text, bool upper_line) {
   int max_chars = upper_line ? 4 : 5;
-
+  bool stop = false;
   //Ausgebe des Strings so weit es geht. Rest wird abgeschnitten
-  for (int i = 0; i < max_chars && text[i] != 0; i++) {
+  for (int i = 0; i < max_chars; i++) {
     //Leerzeichenbehandlung
     if (text[i] == 32) {
       output(symbolArr[0], i + 1, upper_line);
-    } else {
+    } else if(text[i]==0){
+        stop = true;
+        output(0b00000000, i+1, upper_line);
+    }else if (stop){
+        output(0b00000000, i+1, upper_line);
+    } else{
       show_char(text[i], i + 1, upper_line);
     }
 
