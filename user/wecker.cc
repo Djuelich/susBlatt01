@@ -36,6 +36,7 @@ void Wecker::action () {
 					mybuzz.sleep();
 					ButtonService::instance().wait_for_lcd(); // p()
 				}
+
 				if(Buttons::instance().pressed( Buttons::STAR)){
 					current_state = Countdown;
 					break;

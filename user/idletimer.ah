@@ -35,7 +35,7 @@ aspect IdleTimer {
     }
 
     advice execution("% CPUWatch::dummy(...)") : after(){
-        int temp = (int)(((float)idleTime)/((float)totalTime) *100)
+        int temp = (int)(((float)idleTime)/((float)totalTime) *100);
         LCD::instance().show_number(temp, false);
     }
 
