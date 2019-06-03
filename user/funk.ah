@@ -1,0 +1,17 @@
+#ifndef FUNK_AH
+#define FUNK_AH
+
+#include "user/funk.h"
+#include "syscall/guarded_organizer.h"
+
+aspect FunkAH {
+
+
+	advice execution("static % ready_threads(...)") : before () {
+		Guarded_Organizer::instance().ready(Funk::instance());
+	}
+
+
+
+};
+#endif

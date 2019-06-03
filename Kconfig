@@ -29,3 +29,25 @@ menu "Debughilfen"
 			Zeigt an, ob die Interruptsynchronisation falsch benutzt wird.
 endmenu
 
+menu "Funktion"
+	config BUTTON_SERVICE
+		bool "ButtonService An/Aus"
+		default y
+
+	config WECKER
+		bool "Wecker An/Aus"
+		depends on BUTTON_SERVICE
+		default y
+
+
+	config FUNK
+		bool "Funk An/Aus"
+		depends on BUTTON_SERVICE
+		default y
+
+	
+	config CPU_WATCH
+		bool "CPUWatch An/Aus"
+		default y
+
+endmenu

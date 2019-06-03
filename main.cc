@@ -16,16 +16,13 @@
 
 // Hier sollten die Includes der eigenen Thread-Headerfiles ergaenzt werden
 #include "user/mainthread.h"
-#include "user/buttonservice.h"
-#include "user/wecker.h"
-#include "user/cpuwatch.h"
+//#include "user/buttonservice.h"
+//#include "user/wecker.h"
+//#include "user/cpuwatch.h"
 
 /* Threads beim Scheduler anmelden */
 static void ready_threads() {
   Guarded_Organizer::instance().ready(MainThread::instance());
-  Guarded_Organizer::instance().ready(ButtonService::instance());
-  Guarded_Organizer::instance().ready(Wecker::instance());
-  Guarded_Organizer::instance().ready(CPUWatch::instance());
 }
 
 int main() {

@@ -167,7 +167,7 @@ void LCD::show_number(long int number, bool upper_line) {
 
 
     //Führende Nullen entfernen und Anfang der Zahl merken
-    if (temp == 0) {
+    if (temp == 0 && i != (max_digits-1)) {
       if(stop==0){
         stop = i;
       }

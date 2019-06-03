@@ -18,7 +18,7 @@ private:
   LCD();
 
   static unsigned char switch_nibbles(unsigned char input);
-  static void output (unsigned char input, unsigned int pos, bool upper_line);
+  //static void output (unsigned char input, unsigned int pos, bool upper_line);
 
   // Hinweis: Speicherbereich des LCD-Controllers (Kap. 23 des slau259)
   enum { LCD_MEMORY_START = 0x0a00 + 0x20, /* LCDM1  */
@@ -45,6 +45,8 @@ public:
    * Die untere Zeile hat 5 Positionen:  12345
    *
    */
+
+  static void output (unsigned char input, unsigned int pos, bool upper_line);
 
   // Zeigt eine einzelne Ziffer "digit" an
   void show_digit(unsigned int digit, unsigned int pos, bool upper_line = false);

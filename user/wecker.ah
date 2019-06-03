@@ -1,0 +1,17 @@
+#ifndef WECKER_AH
+#define WECKER_AH
+
+#include "user/wecker.h"
+#include "syscall/guarded_organizer.h"
+
+aspect WeckerAH {
+
+
+	advice execution("static % ready_threads(...)") : before () {
+		Guarded_Organizer::instance().ready(Wecker::instance());
+	}
+
+
+
+};
+#endif

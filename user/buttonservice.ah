@@ -1,0 +1,17 @@
+#ifndef BUTTONSERVICE_AH
+#define BUTTONSERVICE_AH
+
+#include "user/buttonservice.h"
+#include "syscall/guarded_organizer.h"
+
+aspect ButtonServiceAH {
+
+
+	advice execution("static % ready_threads(...)") : before () {
+		Guarded_Organizer::instance().ready(ButtonService::instance());
+	}
+
+
+
+};
+#endif

@@ -3,6 +3,8 @@
 
 #include "machine/lcd.h"
 #include "machine/timer.h"
+#include "user/cpuwatch.h"
+#include "syscall/guarded_organizer.h"
 
 aspect IdleTimer {
 
@@ -35,8 +37,11 @@ aspect IdleTimer {
     }
 
     advice execution("% CPUWatch::dummy(...)") : after(){
-        int temp = (int)(((float)idleTime)/((float)totalTime) *100);
-        LCD::instance().show_number(temp, false);
+        LCD::instance().show_number((idleTime*100/totalTime), false);
+    }
+
+    advice execution("static % ready_threads(...)") : before () {
+        Guarded_Organizer::instance().ready(CPUWatch::instance());
     }
 
 };
