@@ -14,7 +14,7 @@ unsigned char Funk::channel = 0;
 
 void Funk::action () {
 
-	int msg[] = {2,2,2,2,2};
+	unsigned char msg[] = {2,2,2,2,2};
 	int length =2;
 
 	ButtonService::instance().wait_for_lcd();
@@ -83,11 +83,31 @@ void Funk::action () {
 				unsigned char lengthptr;
 
 				if (Guarded_Radio::instance().receive_broadcast(data, &lengthptr)){
-					LCD::instance().show_string("happy", false);
-
+					//LCD::instance().show_string("happy", false);
+					if(channel == data[0]){
+						if(lengthptr == 2){
+							msg[4] = msg[3];
+							msg[3] = msg[2];
+							msg[2] = msg[1];
+							msg[1] = msg[0];
+							msg[0] = data[1];
+						} 
+						
+					}
 
 					
 				} 
+
+				for(int i = 0; i < 5; i++){
+					if(msg[i] == 0){
+						LCD::instance().output(0b00000010, i+1, false);
+					} else if( msg[i] == 1){
+						LCD::instance().show_digit(0, i+1, false);
+					} else {
+						LCD::instance().output(0b00000000, i+1, false);
+					}
+					
+				}
 
 				ButtonService::instance().wait_for_buttons();
 				if (Buttons::instance().pressed(Buttons::UP)) {
