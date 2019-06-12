@@ -84,8 +84,8 @@ void Funk::action () {
 
 				if (Guarded_Radio::instance().receive_broadcast(data, &lengthptr)){
 					//LCD::instance().show_string("happy", false);
-					if(channel == data[0]){
-						if(lengthptr == 2){
+					if(lengthptr == 2){
+						if(channel == data[0]){
 							msg[4] = msg[3];
 							msg[3] = msg[2];
 							msg[2] = msg[1];
