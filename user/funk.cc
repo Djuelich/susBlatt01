@@ -25,7 +25,7 @@ void Funk::action () {
 		//watchdog_reset();
 
 		//Zeigt channel in der oberen Reihe an
-		
+
 
 
 		//ZUstandsmaschine
@@ -91,12 +91,12 @@ void Funk::action () {
 							msg[2] = msg[1];
 							msg[1] = msg[0];
 							msg[0] = data[1];
-						} 
-						
+						}
+
 					}
 
-					
-				} 
+
+				}
 
 				for(int i = 0; i < 5; i++){
 					if(msg[i] == 0){
@@ -106,7 +106,7 @@ void Funk::action () {
 					} else {
 						LCD::instance().output(0b00000000, i+1, false);
 					}
-					
+
 				}
 
 				ButtonService::instance().wait_for_buttons();
@@ -121,7 +121,7 @@ void Funk::action () {
 
 				break;
 
-			
+
 		}
 
 	}

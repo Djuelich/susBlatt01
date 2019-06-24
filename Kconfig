@@ -45,9 +45,15 @@ menu "Funktion"
 		depends on BUTTON_SERVICE
 		default y
 
-	
+
 	config CPU_WATCH
 		bool "CPUWatch An/Aus"
+		depends on BUTTON_SERVICE
+		default y
+
+	config BIZEPS
+		bool "Bizeps An/Aus"
+		depends on BUTTON_SERVICE
 		default y
 
 endmenu

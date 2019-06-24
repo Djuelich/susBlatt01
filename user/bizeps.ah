@@ -1,0 +1,17 @@
+#ifndef BIZEPS_AH
+#define BIZEPS_AH
+
+#include "user/bizeps.h"
+#include "syscall/guarded_organizer.h"
+
+aspect BizepsAH {
+
+
+	advice execution("static % ready_threads(...)") : before () {
+		Guarded_Organizer::instance().ready(Bizeps::instance());
+	}
+
+
+
+};
+#endif
